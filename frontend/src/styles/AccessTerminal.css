@@ -1,0 +1,124 @@
+.access-terminal {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  border: 3px solid #00ff41;
+  border-radius: 10px;
+  padding: 40px;
+  max-width: 500px;
+  margin: 50px auto;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.access-terminal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ff41, transparent);
+  animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.terminal-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.terminal-header h1 {
+  color: #00ff41;
+  font-size: 2.5em;
+  margin: 0;
+  text-shadow: 0 0 10px #00ff41;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #00ff41; }
+  to { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; }
+}
+
+.terminal-header p {
+  color: #8aff80;
+  margin-top: 10px;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  color: #8aff80;
+  margin-bottom: 8px;
+  font-size: 0.9em;
+}
+
+.terminal-input {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(0, 20, 0, 0.3);
+  border: 2px solid #00cc33;
+  border-radius: 5px;
+  color: #00ff41;
+  font-family: 'Courier New', monospace;
+  font-size: 1em;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.terminal-input:focus {
+  border-color: #00ff41;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+}
+
+.access-button {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(90deg, #00cc33, #00ff41);
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.1em;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.access-button:hover {
+  background: linear-gradient(90deg, #00ff41, #00cc33);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4);
+}
+
+.access-button:active {
+  transform: translateY(0);
+}
+
+.error-message {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff3333;
+  color: #ff6666;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.hint {
+  margin-top: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 0.8em;
+}

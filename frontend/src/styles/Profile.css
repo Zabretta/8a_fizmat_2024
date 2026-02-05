@@ -1,0 +1,146 @@
+.profile-container {
+  background: linear-gradient(135deg, rgba(10, 20, 10, 0.9), rgba(20, 40, 20, 0.9));
+  border: 2px solid #00ff41;
+  border-radius: 10px;
+  padding: 25px;
+  margin: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, transparent 30%, rgba(0, 255, 65, 0.1) 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #00ff41;
+  background: linear-gradient(45deg, #008822, #00cc33);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  color: white;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h3 {
+  margin: 0;
+  color: #00ff41;
+  font-size: 1.3em;
+}
+
+.agent-status {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(0, 255, 65, 0.2);
+  border-radius: 20px;
+  color: #8aff80;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+.profile-details {
+  position: relative;
+  z-index: 1;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.detail-label {
+  color: #8aff80;
+  font-size: 0.9em;
+}
+
+.detail-value {
+  color: #00ff41;
+  font-weight: bold;
+}
+
+.credits-badge {
+  background: linear-gradient(90deg, #ffd700, #ffed4e);
+  color: #000;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  margin-top: 15px;
+  text-align: center;
+  display: inline-block;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 10px;
+  background: rgba(0, 30, 0, 0.3);
+  border-radius: 5px;
+}
+
+.stat-value {
+  font-size: 1.5em;
+  color: #00ff41;
+  font-weight: bold;
+}
+
+.stat-label {
+  font-size: 0.8em;
+  color: #8aff80;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #cc0000, #ff3333);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 20px;
+}
+
+.logout-button:hover {
+  background: linear-gradient(90deg, #ff3333, #cc0000);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+}

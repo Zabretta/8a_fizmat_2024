@@ -1,0 +1,133 @@
+.login-page {
+  min-height: 100vh;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 50, 0, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 100, 0, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0a0a 0%, #001a00 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 255, 65, 0.03) 1px,
+      rgba(0, 255, 65, 0.03) 2px
+    );
+  pointer-events: none;
+}
+
+.logo-container {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.logo {
+  font-size: 3em;
+  color: #00ff41;
+  text-shadow: 0 0 20px #00ff41;
+  animation: logoGlow 3s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+  0%, 100% { text-shadow: 0 0 20px #00ff41; }
+  50% { text-shadow: 0 0 40px #00ff41, 0 0 60px #00ff41; }
+}
+
+.logo-subtitle {
+  color: #8aff80;
+  margin-top: 10px;
+  letter-spacing: 3px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 40px;
+}
+
+.warning-banner {
+  background: rgba(255, 200, 0, 0.1);
+  border: 1px solid #ffcc00;
+  color: #ffcc00;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.warning-banner h3 {
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.agents-list {
+  background: rgba(0, 30, 0, 0.3);
+  border: 1px solid #008822;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.agents-list h4 {
+  color: #00ff41;
+  margin: 0 0 15px 0;
+}
+
+.agent-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+}
+
+.agent-name {
+  color: #8aff80;
+}
+
+.agent-status {
+  color: #00ff41;
+  font-size: 0.9em;
+}
+
+.footer-hint {
+  text-align: center;
+  margin-top: 40px;
+  color: #666;
+  font-size: 0.8em;
+}
+
+.error-banner {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff3333;
+  color: #ff6666;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 20px 0;
+  text-align: center;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
