@@ -1,4 +1,3 @@
-
 import { Server } from 'socket.io'
 import { PrismaClient } from '@prisma/client'
 
@@ -21,7 +20,14 @@ export const setupSocket = (io: Server, prisma: PrismaClient) => {
             content: data.content,
             userId: data.userId
           },
-          include: { user: { select: { nickname: true } } }
+          include: { 
+            user: { 
+              select: { 
+                nickname: true, 
+                avatar: true  // ← avatar теперь есть в модели User
+              } as any
+            } 
+          }
         })
         io.emit('message:new', message)
       } catch (error) {

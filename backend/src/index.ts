@@ -1,4 +1,3 @@
-
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
@@ -6,6 +5,7 @@ import cors from 'cors'
 import { PrismaClient } from '@prisma/client'
 import authRoutes from './routes/auth'
 import chatRoutes from './routes/chat'
+import avatarRoutes from './routes/avatar'  // ← НОВЫЙ ИМПОРТ
 import { setupSocket } from './utils/socket'
 import dotenv from 'dotenv'
 
@@ -19,6 +19,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/chat', chatRoutes)
+app.use('/api/avatars', avatarRoutes)  // ← НОВЫЙ РОУТ
 
 setupSocket(io, prisma)
 

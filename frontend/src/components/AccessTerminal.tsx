@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './../styles/AccessTerminal.css'
 
 interface AccessTerminalProps {
   onAccess: (nickname: string, code: string) => void
@@ -7,6 +8,7 @@ interface AccessTerminalProps {
 const AccessTerminal: React.FC<AccessTerminalProps> = ({ onAccess }) => {
   const [nickname, setNickname] = useState('')
   const [code, setCode] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -16,39 +18,54 @@ const AccessTerminal: React.FC<AccessTerminalProps> = ({ onAccess }) => {
   }
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h1 style={{ color: '#0f0', fontSize: '2em' }}>ТЕРМИНАЛ ДОСТУПА</h1>
+    <div className="access-terminal">
+      <div className="terminal-header">
+        <h1>ТЕРМИНАЛ ДОСТУПА</h1>
+        <p>Введите позывной и код для доступа к штабу</p>
+      </div>
+      
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="input-group">
+          <label>🚀 Позывной агента</label>
           <input
             type="text"
-            placeholder="Позывной"
+            className="terminal-input"
+            placeholder="Введите ваш позывной"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
-            style={{ padding: '10px', margin: '10px', width: '300px' }}
+            required
           />
         </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Код доступа"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            style={{ padding: '10px', margin: '10px', width: '300px' }}
-          />
+
+        <div className="input-group">
+          <label>🔑 Код доступа</label>
+          <div className="password-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="terminal-input"
+              placeholder="Введите код отряда"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? "Скрыть пароль" : "Показать пароль"}
+            >
+              {showPassword ? '👁️' : '👁️‍🗨️'}
+            </button>
+          </div>
         </div>
-        <button
-          type="submit"
-          style={{
-            padding: '10px 20px',
-            background: '#0f0',
-            color: '#000',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
+
+        <button type="submit" className="access-button">
           ВОЙТИ В ШТАБ
         </button>
+
+        <div className="hint">
+          💡 <strong>Подсказка:</strong> Код доступа одинаков для всех агентов отряда
+        </div>
       </form>
     </div>
   )

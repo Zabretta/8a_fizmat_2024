@@ -56,15 +56,23 @@
 }
 
 .input-group label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: #8aff80;
   margin-bottom: 8px;
   font-size: 0.9em;
 }
 
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
 .terminal-input {
   width: 100%;
   padding: 12px 15px;
+  padding-right: 50px;
   background: rgba(0, 20, 0, 0.3);
   border: 2px solid #00cc33;
   border-radius: 5px;
@@ -73,11 +81,40 @@
   font-size: 1em;
   outline: none;
   transition: all 0.3s;
+  box-sizing: border-box;
 }
 
 .terminal-input:focus {
   border-color: #00ff41;
   box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #8aff80;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 1.2em;
+  transition: all 0.3s;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.toggle-password:hover {
+  color: #00ff41;
+  background: rgba(0, 255, 65, 0.1);
+}
+
+.toggle-password:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .access-button {
@@ -106,6 +143,21 @@
   transform: translateY(0);
 }
 
+.hint {
+  margin-top: 20px;
+  text-align: center;
+  color: #8aff80;
+  font-size: 0.85em;
+  padding: 10px;
+  background: rgba(0, 30, 0, 0.2);
+  border-radius: 5px;
+  border: 1px solid rgba(0, 255, 65, 0.1);
+}
+
+.hint strong {
+  color: #00ff41;
+}
+
 .error-message {
   background: rgba(255, 0, 0, 0.1);
   border: 1px solid #ff3333;
@@ -114,11 +166,4 @@
   border-radius: 5px;
   margin: 15px 0;
   text-align: center;
-}
-
-.hint {
-  margin-top: 20px;
-  text-align: center;
-  color: #666;
-  font-size: 0.8em;
 }
