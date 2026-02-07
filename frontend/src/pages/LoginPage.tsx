@@ -14,7 +14,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuth }) => {
 
   const handleAccess = async (nickname: string, code: string) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/login', {
+      const response = await axios.post('http://192.168.1.83:8000/api/auth/login', {
         nickname,
         code
       })

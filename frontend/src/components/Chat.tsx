@@ -5,7 +5,7 @@ import './../styles/Chat.css'
 
 interface MessageUser {
   nickname: string
-  avatar: string  // ← ДОБАВЛЕНО
+  avatar: string
 }
 
 interface Message {
@@ -27,21 +27,18 @@ const Chat = () => {
     const token = localStorage.getItem('token')
     if (!token) return
 
-    // Получаем профиль
-    axios.get('http://localhost:8000/api/auth/profile', {
+    axios.get('http://192.168.1.83:8000/api/auth/profile', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => {
       setUserId(res.data.id)
       setUserAvatar(res.data.avatar || '👤')
     })
 
-    // Загружаем сообщения
-    axios.get('http://localhost:8000/api/chat/messages', {
+    axios.get('http://192.168.1.83:8000/api/chat/messages', {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setMessages(res.data))
 
-    // Подключаем WebSocket
-    const socket = io('http://localhost:8000')
+    const socket = io('http://192.168.1.83:8000')
     socketRef.current = socket
 
     socket.on('message:new', (message: Message) => {

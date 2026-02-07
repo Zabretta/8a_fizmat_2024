@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './../styles/AccessTerminal.css'
 
 interface AccessTerminalProps {
-  onAccess: (nickname: string, code: string) => void
+  onAccess: (nickname: string, code: string) => void  // ← ВЕРНУТЬ
 }
 
 const AccessTerminal: React.FC<AccessTerminalProps> = ({ onAccess }) => {
@@ -12,6 +12,7 @@ const AccessTerminal: React.FC<AccessTerminalProps> = ({ onAccess }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('Форма отправлена', { nickname, code })
     if (nickname && code) {
       onAccess(nickname, code)
     }

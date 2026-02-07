@@ -27,7 +27,7 @@ const Profile = () => {
     }
 
     console.log('Делаем запрос к /api/auth/profile')
-    axios.get('http://localhost:8000/api/auth/profile', {
+    axios.get('http://192.168.1.83:8000/api/auth/profile', {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -38,7 +38,6 @@ const Profile = () => {
       console.error('Ошибка загрузки профиля:', error)
       console.log('Используем временные данные для тестирования')
       
-      // Временные данные
       const mockUser = {
         id: 'temp-id-' + Math.random().toString(36).substr(2, 9),
         nickname: localStorage.getItem('nickname') || 'Тестовый агент',
@@ -58,7 +57,7 @@ const Profile = () => {
       if (!token) return
 
       const response = await axios.patch(
-        'http://localhost:8000/api/auth/avatar',
+        'http://192.168.1.83:8000/api/auth/avatar',
         { avatar: newAvatar },
         { headers: { Authorization: `Bearer ${token}` } }
       )

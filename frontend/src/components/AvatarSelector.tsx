@@ -8,7 +8,6 @@ interface AvatarSelectorProps {
   onClose: () => void
 }
 
-// Статичный список аватаров (101 шт)
 const AVAILABLE_AVATARS = [
   '👮', '👮‍♂️', '👮‍♀️', '🕵️', '🕵️‍♂️', '🕵️‍♀️', '💂', '💂‍♂️', '💂‍♀️',
   '👷', '👷‍♂️', '👷‍♀️', '🧑‍🌾', '👨‍🌾', '👩‍🌾', '🧑‍🍳', '👨‍🍳', '👩‍🍳',
@@ -38,14 +37,12 @@ const AvatarSelector: React.FC<AvatarSelectorProps> = ({
         const token = localStorage.getItem('token')
         if (!token) return
 
-        // Получаем список занятых аватаров с правильного эндпоинта
-        const response = await axios.get('http://localhost:8000/api/avatars/used-avatars', {
+        const response = await axios.get('http://192.168.1.83:8000/api/avatars/used-avatars', {
           headers: { Authorization: `Bearer ${token}` }
         })
         setUsedAvatars(response.data.used || [])
       } catch (error) {
         console.error('Ошибка загрузки аватаров:', error)
-        // Если эндпоинта нет, используем пустой список
         setUsedAvatars([])
       } finally {
         setLoading(false)
@@ -126,6 +123,5 @@ const AvatarSelector: React.FC<AvatarSelectorProps> = ({
     </div>
   )
 }
-
 
 export default AvatarSelector
