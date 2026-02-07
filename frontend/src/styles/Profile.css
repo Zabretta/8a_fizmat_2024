@@ -187,3 +187,127 @@
   padding: 40px;
   font-size: 1.2em;
 }
+
+/* Мобильные устройства (до 768px) */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 12px;
+    margin: 0 10px;
+  }
+  
+  .profile-header {
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .avatar {
+    width: 70px;
+    height: 70px;
+    font-size: 2.5em;
+    border-width: 2px;
+  }
+  
+  .avatar-change-hint {
+    font-size: 0.35em;
+    padding: 4px;
+  }
+  
+  .profile-info h3 {
+    font-size: 1.5em;
+  }
+  
+  .agent-status {
+    font-size: 0.85em;
+    padding: 4px 12px;
+  }
+  
+  .profile-details {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .detail-row {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+  
+  .detail-label,
+  .detail-value {
+    font-size: 0.95em;
+  }
+  
+  .stats-grid {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-item {
+    padding: 12px;
+  }
+  
+  .stat-value {
+    font-size: 1.8em;
+  }
+  
+  .stat-label {
+    font-size: 0.75em;
+  }
+  
+  .profile-actions {
+    gap: 12px;
+  }
+  
+  .profile-button,
+  .logout-button {
+    padding: 14px;
+    font-size: 0.95em;
+  }
+  
+  .loading {
+    padding: 30px;
+    font-size: 1.1em;
+  }
+}
+
+/* Очень маленькие экраны (до 480px) */
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 2.2em;
+  }
+  
+  .profile-info h3 {
+    font-size: 1.3em;
+  }
+  
+  .profile-details {
+    padding: 12px;
+  }
+  
+  .detail-row {
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .profile-button,
+  .logout-button {
+    padding: 12px;
+    font-size: 0.9em;
+    letter-spacing: 0.5px;
+  }
+}

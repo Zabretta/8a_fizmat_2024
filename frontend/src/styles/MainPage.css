@@ -244,11 +244,116 @@
   }
 }
 
-@media (max-width: 768px) {
+/* Планшеты (768px - 1024px) */
+@media (max-width: 1024px) {
+  .main-header {
+    padding: 30px 15px;
+  }
+  
   .main-title {
-    font-size: 2.5em;
+    font-size: 3em;
+    gap: 20px;
+  }
+  
+  .title-glow {
+    padding: 12px 30px;
+    font-size: 1.1em;
+  }
+  
+  .title-text {
+    font-size: 0.8em;
+    letter-spacing: 6px;
+  }
+  
+  .content-wrapper {
+    padding: 0 20px 20px 20px;
+    gap: 25px;
+  }
+}
+
+/* Мобильные устройства (до 768px) */
+@media (max-width: 768px) {
+  .main-header {
+    padding: 25px 12px;
+    margin-bottom: 20px;
+  }
+  
+  .main-title {
+    font-size: 2.2em;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
+  }
+  
+  .title-glow {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    letter-spacing: 2px;
+    border-width: 2px;
+  }
+  
+  .title-text {
+    font-size: 0.8em;
+    letter-spacing: 3px;
+    padding: 10px 20px;
+    border-width: 2px;
+  }
+  
+  .title-divider {
+    font-size: 2.5em;
+    transform: rotate(90deg);
+    margin: 5px 0;
+  }
+  
+  .subtitle {
+    font-size: 1em;
+    letter-spacing: 1.5px;
+    margin-top: 12px;
+    line-height: 1.4;
+    padding: 0 10px;
+  }
+  
+  .content-wrapper {
+    padding: 0 12px 15px 12px;
+    gap: 18px;
+  }
+  
+  .chat-section,
+  .profile-section {
+    border-width: 2px;
+    border-radius: 12px;
+  }
+  
+  .main-footer {
+    padding: 20px 15px;
+    margin-top: 25px;
+  }
+  
+  .footer-text {
+    font-size: 0.85em;
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+  
+  .header-dots {
+    margin-top: 20px;
+    gap: 12px;
+  }
+  
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Очень маленькие экраны (до 480px) */
+@media (max-width: 480px) {
+  .main-header {
+    padding: 20px 10px;
+  }
+  
+  .main-title {
+    font-size: 1.8em;
+    gap: 10px;
   }
   
   .title-glow {
@@ -258,13 +363,8 @@
   
   .title-text {
     font-size: 0.7em;
-    letter-spacing: 4px;
-    padding: 8px 20px;
-  }
-  
-  .title-divider {
-    font-size: 3em;
-    transform: rotate(90deg);
+    letter-spacing: 2px;
+    padding: 8px 15px;
   }
   
   .subtitle {
@@ -273,7 +373,50 @@
   }
   
   .content-wrapper {
-    padding: 0 15px 15px 15px;
-    gap: 20px;
+    padding: 0 10px 12px 10px;
+    gap: 15px;
+  }
+  
+  .chat-section,
+  .profile-section {
+    border-width: 1px;
+    border-radius: 10px;
+  }
+  
+  .header-dots {
+    gap: 10px;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Ландшафтная ориентация на мобильных */
+@media (max-height: 500px) and (orientation: landscape) {
+  .main-header {
+    padding: 15px 10px;
+    margin-bottom: 15px;
+  }
+  
+  .main-title {
+    font-size: 1.6em;
+    flex-direction: row;
+    gap: 15px;
+  }
+  
+  .title-divider {
+    transform: none;
+    font-size: 2em;
+  }
+  
+  .content-wrapper {
+    flex-direction: row;
+    padding: 0 10px 10px 10px;
+  }
+  
+  .profile-section {
+    max-width: 300px;
   }
 }
