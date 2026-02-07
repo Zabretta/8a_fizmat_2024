@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 
@@ -9,7 +8,14 @@ export const getMessages = async (req: Request, res: Response) => {
     const messages = await prisma.message.findMany({
       take: 50,
       orderBy: { createdAt: 'desc' },
-      include: { user: { select: { nickname: true } } }
+      include: { 
+        user: { 
+          select: { 
+            nickname: true,
+            avatar: true  // ← ДОБАВИТЬ ЭТО
+          } 
+        } 
+      }
     })
     res.json(messages.reverse())
   } catch (error) {

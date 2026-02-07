@@ -64,6 +64,8 @@
 .message {
   margin-bottom: 15px;
   animation: slideIn 0.3s ease-out;
+  border-radius: 8px;
+  padding: 12px 15px;
 }
 
 @keyframes slideIn {
@@ -80,33 +82,49 @@
 .message-self {
   background: rgba(0, 255, 65, 0.1);
   border-left: 3px solid #00ff41;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .message-other {
   background: rgba(255, 255, 255, 0.05);
   border-left: 3px solid #666;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .message-header {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.message-avatar {
+  font-size: 1.5em;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .message-sender {
   color: #00ff41;
   font-weight: bold;
   font-size: 0.9em;
+  flex-grow: 1;
 }
 
 .message-time {
   color: #666;
   font-size: 0.8em;
+  white-space: nowrap;
 }
 
 .message-content {
   color: #e0ffe0;
-  padding: 8px 0;
+  padding: 8px 0 0 40px; /* Отступ слева для выравнивания с текстом */
+  line-height: 1.4;
 }
 
 .message-input-area {
@@ -115,6 +133,19 @@
   background: rgba(0, 20, 0, 0.8);
   border-top: 2px solid #00cc33;
   gap: 10px;
+  align-items: center;
+}
+
+.avatar-preview {
+  font-size: 1.8em;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 40, 0, 0.5);
+  border-radius: 8px;
+  border: 2px solid #008822;
 }
 
 .message-input {
@@ -126,6 +157,7 @@
   color: #00ff41;
   font-family: 'Courier New', monospace;
   outline: none;
+  font-size: 1em;
 }
 
 .message-input:focus {
@@ -142,6 +174,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
+  font-size: 1.1em;
 }
 
 .send-button:hover {
@@ -160,4 +193,23 @@
   font-size: 0.8em;
   padding: 5px 20px;
   font-style: italic;
+}
+
+/* Стилизация скроллбара */
+.messages-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: rgba(0, 20, 0, 0.3);
+  border-radius: 4px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: #00cc33;
+  border-radius: 4px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: #00ff41;
 }

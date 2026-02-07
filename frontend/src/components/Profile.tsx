@@ -65,6 +65,10 @@ const Profile = () => {
       console.log('Аватар успешно изменён:', response.data)
       setUser(prev => prev ? { ...prev, avatar: response.data.avatar } : null)
       setShowAvatarSelector(false)
+      
+      // СОБЫТИЕ ДЛЯ ОБНОВЛЕНИЯ ЧАТА
+      window.dispatchEvent(new Event('avatarChanged'))
+      
     } catch (error: any) {
       console.error('Ошибка смены аватара:', error.response?.data?.error || error.message)
       alert(error.response?.data?.error || 'Ошибка смены аватара')

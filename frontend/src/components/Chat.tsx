@@ -50,6 +50,26 @@ const Chat = () => {
     }
   }, [])
 
+  // НОВЫЙ ЭФФЕКТ ДЛЯ ОБНОВЛЕНИЯ АВАТАРА
+  useEffect(() => {
+    const handleAvatarChange = () => {
+      const token = localStorage.getItem('token')
+      if (!token) return
+      
+      axios.get('http://192.168.1.83:8000/api/auth/profile', {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(res => {
+        setUserAvatar(res.data.avatar || '👤')
+      })
+    }
+    
+    window.addEventListener('avatarChanged', handleAvatarChange)
+    
+    return () => {
+      window.removeEventListener('avatarChanged', handleAvatarChange)
+    }
+  }, [])
+
   const sendMessage = () => {
     if (input.trim() && userId && socketRef.current) {
       socketRef.current.emit('message:send', {
