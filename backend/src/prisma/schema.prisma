@@ -15,6 +15,13 @@ model User {
   online    Boolean   @default(false)
   createdAt DateTime  @default(now())
   messages  Message[]
+  
+  // АДМИН-ПАНЕЛЬ: Роль пользователя
+  role      String    @default("user")
+  
+  // АДМИН-ПАНЕЛЬ: СВЯЗИ (ЭТО ВАЖНО!)
+  adminLogs AdminLog[] // Действия, совершенные этим пользователем как админом
+  bans      UserBan[]  // 👈⚠️ КЛЮЧЕВАЯ СТРОКА! ЭТОЙ НЕ ХВАТАЛО
 }
 
 model Message {
@@ -23,4 +30,59 @@ model Message {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+}
+
+// Логирование действий командного центра
+model AdminLog {
+  id        String   @id @default(uuid())
+  action    String
+  targetId  String?
+  details   String?
+  createdAt DateTime @default(now())
+  
+  adminId   String
+  admin     User     @relation(fields: [adminId], references: [id])
+  
+  @@index([adminId])
+  @@index([createdAt])
+}
+
+// Системные настройки штаба
+model SystemSettings {
+  id        String   @id @default("squad-config")
+  
+  squadCode         String  @default("8A-FIZMAT")
+  allowCustomAvatars Boolean @default(true)
+  systemMessage     String?
+  systemMessageActive Boolean @default(false)
+  profanityFilter   Boolean @default(false)
+  requireModeration Boolean @default(false)
+  
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+  
+  @@map("system_settings")
+}
+
+// Забаненные слова
+model BannedWord {
+  id        String   @id @default(uuid())
+  word      String   @unique
+  addedBy   String
+  createdAt DateTime @default(now())
+  
+  @@map("banned_words")
+}
+
+// Временные блокировки пользователей
+model UserBan {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id]) // Связь с User
+  reason    String?
+  bannedBy  String
+  bannedAt  DateTime @default(now())
+  expiresAt DateTime?
+  
+  @@map("user_bans")
 }

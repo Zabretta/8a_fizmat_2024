@@ -11,58 +11,94 @@ interface User {
   online: boolean
 }
 
+// 👇 Умное определение базового URL
+const API_URL = (() => {
+  if (window.location.hostname === '192.168.1.83') {
+    return 'http://192.168.1.83:8000'
+  }
+  return 'http://localhost:8000'
+})()
+
+// 👇 Создаем настроенный экземпляр axios
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// 👇 Добавляем перехватчик для токена
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 const Profile = () => {
   console.log('Компонент Profile рендерится')
   const [user, setUser] = useState<User | null>(null)
   const [showAvatarSelector, setShowAvatarSelector] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    console.log('Profile useEffect запущен')
-    const token = localStorage.getItem('token')
-    console.log('Токен из localStorage:', token)
-    
-    if (!token) {
-      console.log('Токен не найден, прерываем')
-      return
+    const fetchProfile = async () => {
+      console.log('Profile useEffect запущен')
+      const token = localStorage.getItem('token')
+      console.log('Токен из localStorage:', token)
+      
+      if (!token) {
+        console.log('Токен не найден, прерываем')
+        setLoading(false)
+        return
+      }
+
+      try {
+        console.log('Делаем запрос к /api/auth/profile')
+        const response = await api.get('/api/auth/profile')
+        console.log('Профиль успешно загружен:', response.data)
+        setUser(response.data)
+        // Сохраняем актуальный никнейм в localStorage
+        if (response.data?.nickname) {
+          localStorage.setItem('nickname', response.data.nickname)
+        }
+        if (response.data?.avatar) {
+          localStorage.setItem('avatar', response.data.avatar)
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки профиля:', error)
+        // Берем данные из localStorage, если они есть
+        const savedNickname = localStorage.getItem('nickname')
+        const savedAvatar = localStorage.getItem('avatar') || '🕵️'
+        
+        const mockUser = {
+          id: 'temp-id-' + Math.random().toString(36).substr(2, 9),
+          nickname: savedNickname || 'Тестовый агент',
+          avatar: savedAvatar,
+          createdAt: new Date().toISOString(),
+          online: true
+        }
+        console.log('Установлены данные из localStorage:', mockUser)
+        setUser(mockUser)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    console.log('Делаем запрос к /api/auth/profile')
-    axios.get('http://192.168.1.83:8000/api/auth/profile', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(res => {
-      console.log('Профиль успешно загружен:', res.data)
-      setUser(res.data)
-    })
-    .catch(error => {
-      console.error('Ошибка загрузки профиля:', error)
-      console.log('Используем временные данные для тестирования')
-      
-      const mockUser = {
-        id: 'temp-id-' + Math.random().toString(36).substr(2, 9),
-        nickname: localStorage.getItem('nickname') || 'Тестовый агент',
-        avatar: '🕵️',
-        createdAt: new Date().toISOString(),
-        online: true
-      }
-      console.log('Установлены временные данные:', mockUser)
-      setUser(mockUser)
-    })
+    fetchProfile()
   }, [])
 
   const changeAvatar = async (newAvatar: string) => {
     try {
       console.log('Смена аватара на:', newAvatar)
-      const token = localStorage.getItem('token')
-      if (!token) return
-
-      const response = await axios.patch(
-        'http://192.168.1.83:8000/api/auth/avatar',
-        { avatar: newAvatar },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-
+      
+      const response = await api.patch('/api/auth/avatar', { avatar: newAvatar })
       console.log('Аватар успешно изменён:', response.data)
+      
+      // Сохраняем новый аватар в localStorage
+      localStorage.setItem('avatar', newAvatar)
+      
       setUser(prev => prev ? { ...prev, avatar: response.data.avatar } : null)
       setShowAvatarSelector(false)
       
@@ -75,7 +111,8 @@ const Profile = () => {
     }
   }
 
-  if (!user) return <div className="loading">Загрузка профиля...</div>
+  if (loading) return <div className="loading">Загрузка профиля...</div>
+  if (!user) return <div className="loading">Профиль не найден</div>
 
   return (
     <div className="profile-container">
@@ -139,6 +176,8 @@ const Profile = () => {
           className="logout-button"
           onClick={() => {
             localStorage.removeItem('token')
+            localStorage.removeItem('nickname')
+            localStorage.removeItem('avatar')
             window.location.href = '/login'
           }}
         >

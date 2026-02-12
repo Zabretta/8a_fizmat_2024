@@ -8,21 +8,53 @@ interface LoginPageProps {
   setIsAuth: (value: boolean) => void
 }
 
+// 👇 Умное определение базового URL
+const API_URL = (() => {
+  if (window.location.hostname === '192.168.1.83') {
+    return 'http://192.168.1.83:8000'
+  }
+  return 'http://localhost:8000'
+})()
+
+// 👇 Создаем настроенный экземпляр axios
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
 const LoginPage: React.FC<LoginPageProps> = ({ setIsAuth }) => {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const handleAccess = async (nickname: string, code: string) => {
     try {
-      const response = await axios.post('http://192.168.1.83:8000/api/auth/login', {
+      // 👇 Используем настроенный api, а не прямые URL
+      const response = await api.post('/api/auth/login', {
         nickname,
         code
       })
+      
+      // ✅ Сохраняем токен
       localStorage.setItem('token', response.data.token)
+      
+      // ✅ СОХРАНЯЕМ НИКНЕЙМ!
+      localStorage.setItem('nickname', nickname)
+      
+      // ✅ Сохраняем аватар, если он пришел в ответе
+      if (response.data.user?.avatar) {
+        localStorage.setItem('avatar', response.data.user.avatar)
+      }
+      
+      // 👇 Добавляем токен в будущие запросы axios
+      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
+      
       setIsAuth(true)
       navigate('/')
     } catch (err: any) {
       setError(err.response?.data?.error || 'Ошибка входа')
+      console.error('Детали ошибки:', err.message)
     }
   }
 

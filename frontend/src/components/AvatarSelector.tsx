@@ -8,6 +8,31 @@ interface AvatarSelectorProps {
   onClose: () => void
 }
 
+// 👇 Умное определение базового URL
+const API_URL = (() => {
+  if (window.location.hostname === '192.168.1.83') {
+    return 'http://192.168.1.83:8000'
+  }
+  return 'http://localhost:8000'
+})()
+
+// 👇 Создаем настроенный экземпляр axios
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// 👇 Добавляем перехватчик для токена
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 const AVAILABLE_AVATARS = [
   '👮', '👮‍♂️', '👮‍♀️', '🕵️', '🕵️‍♂️', '🕵️‍♀️', '💂', '💂‍♂️', '💂‍♀️',
   '👷', '👷‍♂️', '👷‍♀️', '🧑‍🌾', '👨‍🌾', '👩‍🌾', '🧑‍🍳', '👨‍🍳', '👩‍🍳',
@@ -35,11 +60,12 @@ const AvatarSelector: React.FC<AvatarSelectorProps> = ({
     const fetchUsedAvatars = async () => {
       try {
         const token = localStorage.getItem('token')
-        if (!token) return
+        if (!token) {
+          setLoading(false)
+          return
+        }
 
-        const response = await axios.get('http://192.168.1.83:8000/api/avatars/used-avatars', {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const response = await api.get('/api/avatars/used-avatars')
         setUsedAvatars(response.data.used || [])
       } catch (error) {
         console.error('Ошибка загрузки аватаров:', error)

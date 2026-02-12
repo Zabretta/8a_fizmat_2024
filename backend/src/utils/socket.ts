@@ -6,11 +6,16 @@ export const setupSocket = (io: Server, prisma: PrismaClient) => {
     console.log('👤 Пользователь подключился:', socket.id)
 
     socket.on('join', async (userId: string) => {
-      await prisma.user.update({
-        where: { id: userId },
-        data: { online: true }
-      })
-      io.emit('user:online', userId)
+      try {
+        await prisma.user.update({
+          where: { id: userId },
+          data: { online: true }
+        })
+        io.emit('user:online', userId)
+        console.log(`✅ Пользователь ${userId} онлайн`)
+      } catch (error) {
+        console.error('Ошибка обновления статуса:', error)
+      }
     })
 
     socket.on('message:send', async (data: { userId: string; content: string }) => {
@@ -24,14 +29,15 @@ export const setupSocket = (io: Server, prisma: PrismaClient) => {
             user: { 
               select: { 
                 nickname: true, 
-                avatar: true  // ← avatar теперь есть в модели User
-              } as any
+                avatar: true
+              } 
             } 
           }
         })
         io.emit('message:new', message)
+        console.log(`📨 Сообщение от ${data.userId}: ${data.content.substring(0, 20)}...`)
       } catch (error) {
-        console.error('Ошибка сохранения сообщения:', error)
+        console.error('❌ Ошибка сохранения сообщения:', error)
       }
     })
 

@@ -16,6 +16,31 @@ interface Message {
   createdAt: string
 }
 
+// 👇 УМНОЕ ОПРЕДЕЛЕНИЕ URL (как в Profile и AvatarSelector)
+const API_URL = (() => {
+  if (window.location.hostname === '192.168.1.83') {
+    return 'http://192.168.1.83:8000'
+  }
+  return 'http://localhost:8000'
+})()
+
+// 👇 СОЗДАЁМ НАСТРОЕННЫЙ ЭКЗЕМПЛЯР AXIOS
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// 👇 ПЕРЕХВАТЧИК ТОКЕНА
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
@@ -27,19 +52,40 @@ const Chat = () => {
     const token = localStorage.getItem('token')
     if (!token) return
 
-    axios.get('http://192.168.1.83:8000/api/auth/profile', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(res => {
-      setUserId(res.data.id)
-      setUserAvatar(res.data.avatar || '👤')
+    // Загружаем профиль
+    api.get('/api/auth/profile')
+      .then(res => {
+        setUserId(res.data.id)
+        setUserAvatar(res.data.avatar || '👤')
+      })
+      .catch(err => console.error('Ошибка загрузки профиля:', err))
+
+    // Загружаем историю сообщений
+    api.get('/api/chat/messages')
+      .then(res => setMessages(res.data))
+      .catch(err => console.error('Ошибка загрузки сообщений:', err))
+
+    // 👇 ПОДКЛЮЧАЕМСЯ К SOCKET.IO С ПРАВИЛЬНЫМ URL
+    const socket = io(API_URL, {
+      transports: ['websocket', 'polling'], // пробуем WebSocket, потом polling
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000
+    })
+    
+    socketRef.current = socket
+
+    socket.on('connect', () => {
+      console.log('✅ Socket.IO подключён!', socket.id)
+      // Отправляем событие join после подключения
+      if (userId) {
+        socket.emit('join', userId)
+      }
     })
 
-    axios.get('http://192.168.1.83:8000/api/chat/messages', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(res => setMessages(res.data))
-
-    const socket = io('http://192.168.1.83:8000')
-    socketRef.current = socket
+    socket.on('connect_error', (error) => {
+      console.error('❌ Ошибка подключения Socket.IO:', error.message)
+    })
 
     socket.on('message:new', (message: Message) => {
       setMessages(prev => [...prev, message])
@@ -48,19 +94,26 @@ const Chat = () => {
     return () => {
       socket.disconnect()
     }
-  }, [])
+  }, []) // Зависимости пустые — выполнится один раз при монтировании
 
-  // НОВЫЙ ЭФФЕКТ ДЛЯ ОБНОВЛЕНИЯ АВАТАРА
+  // Отдельный эффект для отправки join после получения userId
+  useEffect(() => {
+    if (userId && socketRef.current?.connected) {
+      socketRef.current.emit('join', userId)
+    }
+  }, [userId])
+
+  // Эффект для обновления аватара
   useEffect(() => {
     const handleAvatarChange = () => {
       const token = localStorage.getItem('token')
       if (!token) return
       
-      axios.get('http://192.168.1.83:8000/api/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` }
-      }).then(res => {
-        setUserAvatar(res.data.avatar || '👤')
-      })
+      api.get('/api/auth/profile')
+        .then(res => {
+          setUserAvatar(res.data.avatar || '👤')
+        })
+        .catch(err => console.error('Ошибка обновления аватара:', err))
     }
     
     window.addEventListener('avatarChanged', handleAvatarChange)
@@ -71,12 +124,14 @@ const Chat = () => {
   }, [])
 
   const sendMessage = () => {
-    if (input.trim() && userId && socketRef.current) {
+    if (input.trim() && userId && socketRef.current?.connected) {
       socketRef.current.emit('message:send', {
         userId,
         content: input
       })
       setInput('')
+    } else {
+      console.warn('Не удалось отправить сообщение: нет соединения или userId')
     }
   }
 
